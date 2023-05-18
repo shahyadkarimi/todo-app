@@ -1,0 +1,151 @@
+.category.alltasks.active {
+  border-left: 8px solid #78bede;
+  background-color: rgb(244,244,245);
+}
+.category.personal.active {
+  border-left: 8px solid #78dec7;
+  background-color: rgb(244, 244, 245);
+}
+.category.school.active {
+  border-left: 8px solid #ff95c5;
+  background-color: rgb(244, 244, 245);
+}
+.category.work.active {
+  border-left: 8px solid #b983ff;
+  background-color: rgb(244, 244, 245);
+}
+.category.shopping.active {
+  border-left: 8px solid #ffd523;
+  background-color: rgb(244, 244, 245);
+}
+
+
+.category.alltasks.dark {
+  border-left: 8px solid rgba(120,190,222,0.880);
+  background-color: rgb(30,41,59);
+}
+.category.personal.dark {
+  border-left: 8px solid rgba(120,222,198,0.880);
+  background-color: rgb(30,41,59);
+}
+.category.school.dark {
+  border-left: 8px solid rgba(255,149,197,0.880);
+  background-color: rgb(30,41,59);
+}
+.category.work.dark {
+  border-left: 8px solid rgba(185,131,255,0.880);
+  background-color: rgb(30,41,59);
+}
+.category.shopping.dark {
+  border-left: 8px solid rgba(255,215,35,0.880);
+  background-color: rgb(30,41,59);
+}
+
+.todo-checked.active{
+  opacity: 1;
+}
+
+.tooltip.active{
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1.06);
+  transition: all .1s;
+  z-index: 50;
+}
+
+.open svg.active{
+  transform: rotate(-180deg);
+}
+
+.todo.active{
+  max-height: 200px;
+}
+
+/* ----- modals ----- */
+
+/* add task */
+.task-modal-bg.active{
+  opacity: 1;
+  visibility: visible;
+}
+
+.tooltip-bg.active{
+  opacity: 1;
+  visibility: visible;
+}
+
+.task.active{
+  opacity: 1;
+  visibility: visible;
+  top: 50%;
+}
+
+/* edit task */
+.edit-modal.active{
+  opacity: 1;
+  visibility: visible;
+}
+
+.edit-task.active{
+  opacity: 1;
+  visibility: visible;
+  top: 50%;
+}
+.todo-checked.active{
+  opacity: 1;
+}
+
+.light.active{
+  opacity: 1;
+  display: block;
+}
+
+.dark.active{
+  opacity: 1;
+  display: block;
+}
+
+.error-msg.active{
+  opacity: 1;
+  display: block;
+}
+
+.edit-error-msg.active{
+  opacity: 1;
+  display: block;
+}
+/* category radio button */
+input[type="radio"]{
+  display: none;
+}
+/* school */
+.task-category label{
+  position: relative;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 30px;
+  height: 35px;
+  border-radius: 50px;
+  transition: all .2s;
+}
+
+.task-category label::before{
+  position: absolute;
+  right: 30px;
+  content: "";
+  width: 23px;
+  height: 23px;
+  border: 2px solid  rgb(79,70,229);
+  border-radius: 50px;
+  transition: all .1s;
+}
+
+input[type="radio"]:checked + label{
+  background-color: rgb(224,231,255);
+  color: rgb(79,70,229);
+}
+
+input[type="radio"]:checked + label::before{
+  border: 6px solid rgb(79,70,229);
+}

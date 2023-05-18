@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" class="box-border">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/ec90e57e0e.js" crossorigin="anonymous"></script>
+    <title>Todo App</title>
+    <link rel="stylesheet" href="./dist/css/style.css">
+    <link rel="stylesheet" href="./dist/css/custom.css">
+</head>
+
+<body class="h-screen bg-slate-50 relative dark:bg-[rgba(15,22,42,0.98)] transition-all duration-200">
+    <!-- modal backgrounds -->
+    <div
+        class="task-modal-bg opacity-0 backdrop-blur-sm invisible absolute w-full h-full z-50 bg-[#0000004d] transition-all duration-300">
+    </div>
+    <div class="tooltip-bg opacity-0 invisible absolute w-full z-20 h-screen bg-[#0000000c] dark:bg-[#0000004d] transition-all duration-300">
+    </div>
+
+    <!-- add task modal -->
+    <div
+        class="task w-[350px] sm:w-[480px] lg:w-[580px] h-auto bg-white dark:bg-slate-800 absolute z-50 top-1/4 -translate-y-2/4 right-2/4 translate-x-2/4 opacity-0 invisible rounded-xl p-4 transition-all duration-200">
+        <h2 class="text-2xl font-sans font-semibold text-zinc-700 dark:text-slate-300">Add Your Todo</h2>
+        <div class="error-msg opacity-0 hidden text-center leading-10 mt-3 w-full h-10 border border-red-500 text-red-600 px-2 dark:bg-slate-800 dark:border-red-700 dark:text-red-700 rounded-lg transition-all duration-200">Please fill all inputs</div>
+        <form data-status="undone" action="#" id="add-modal">
+            <div class="flex flex-col gap-6 mt-5">
+                <div class="task-tittle flex flex-col gap-2">
+                    <div>
+                        <label for="tittle"
+                            class="text-zinc-700 dark:text-slate-300 font-semibold tracking-wider">Tittle :</label>
+                    </div>
+                    <div>
+                        <input
+                            class="dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 border outline-none focus:ring-2 transition-all duration-200 ring-indigo-600 w-full h-10 placeholder:font-sans px-2 rounded-lg"
+                            type="text" name="" id="tittle" placeholder="Enter tittle">
+                    </div>
+                </div>
+                <div class="task-desc flex flex-col gap-2">
+                    <div>
+                        <label for="desc"
+                            class="text-zinc-700 dark:text-slate-300 font-semibold tracking-wider">Description :</label>
+                    </div>
+                    <div>
+                        <textarea
+                            class="dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300  border outline-none focus:ring-2 transition-all duration-200 ring-indigo-600 w-full h-20 placeholder:font-sans p-2 rounded-lg"
+                            name="" id="desc" cols="30" rows="10" placeholder="Enter description..."></textarea>
+                    </div>
+                </div>
+                <div class="categories flex flex-col justify-center items-center gap-2">
+                    <div class="right-categories w-full justify-between flex gap-2">
+                        <div class="task-category">
+                            <input class="peer" id="personal" type="radio" name="tasks" value="Personal" checked>
+                            <label class="cursor-pointer w-40 sm:w-[220px] lg:w-[270px] px-3 lg:px-6 border dark:border-slate-700 dark:text-slate-300 dark:peer-checked:bg-indigo-500 dark:peer-checked:text-indigo-100 dark:peer-checked:before:border-indigo-100" for="personal">Personal</label>
+                        </div>
+                        <div class="task-category">
+                            <input class="peer" id="school" type="radio" name="tasks" value="School">
+                            <label class="cursor-pointer w-40 sm:w-[220px] lg:w-[270px] px-3 lg:px-6 border dark:border-slate-700 dark:text-slate-300 dark:peer-checked:bg-indigo-500 dark:peer-checked:text-indigo-100 dark:peer-checked:before:border-indigo-100" for="school">School</label>
+                        </div>
+                    </div>
+                    <div class="left-categories w-full justify-between flex gap-2">
+                        <div class="task-category">
+                            <input class="peer" id="work" type="radio" name="tasks" value="Work">
+                            <label class="cursor-pointer w-40 sm:w-[220px] lg:w-[270px] px-3 lg:px-6 border dark:border-slate-700 dark:text-slate-300 dark:peer-checked:bg-indigo-500 dark:peer-checked:text-indigo-100 dark:peer-checked:before:border-indigo-100" for="work">Work</label>
+                        </div>
+                        <div class="task-category">
+                            <input class="peer" id="shopping" type="radio" name="tasks" value="Shopping">
+                            <label class="cursor-pointer w-40 sm:w-[220px] lg:w-[270px] px-3 lg:px-6 border dark:border-slate-700 dark:text-slate-300 dark:peer-checked:bg-indigo-500 dark:peer-checked:text-indigo-100 dark:peer-checked:before:border-indigo-100" for="shopping">Shopping</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons flex justify-center gap-5 mt-4">
+                <div id="cancelBtn"
+                    class="cursor-pointer border dark:border-slate-600 dark:text-indigo-300 dark:hover:bg-slate-600 dark:active:bg-slate-700 hover:bg-indigo-100 active:bg-indigo-200 text-indigo-600 font-sans font-semibold px-6 py-2 rounded-lg transition-colors duration-200">
+                    Cancel</div>
+                <input
+                    class="bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 text-indigo-100 font-sans font-semibold px-6 py-2 rounded-lg cursor-pointer transition-colors duration-200"
+                    type="submit" value="Add Task">
+            </div>
+        </form>
+    </div>
+
+    <!-- edit task modal -->
+    <div class="edit-task w-[350px] bg-white sm:w-[480px] lg:w-[580px] h-auto dark:bg-slate-800 absolute z-50 top-1/4 -translate-y-2/4 right-2/4 translate-x-2/4 opacity-0 invisible rounded-xl p-4 transition-all duration-200">
+        <h2 class="text-2xl font-sans font-semibold text-zinc-700 dark:text-slate-300">Edit Your Todo</h2>
+        <div class="edit-error-msg opacity-0 hidden text-center leading-10 mt-3 w-full h-10 border border-red-500 text-red-600 px-2 dark:bg-slate-800 dark:border-red-700 dark:text-red-700 rounded-lg transition-all duration-200">Please fill all inputs</div>
+        <form data-status="undone" data-edit="" action="#" id="edit-task">
+            <div class="flex flex-col gap-6 mt-8">
+                <div class="task-tittle flex flex-col gap-2">
+                    <div>
+                        <label for="tittle"
+                            class="text-zinc-700 dark:text-slate-300 font-semibold tracking-wider">Tittle :</label>
+                    </div>
+                    <div>
+                        <input
+                            class="dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 border outline-none focus:ring-2 transition-all duration-200 ring-pink-500 w-full h-10 placeholder:font-sans px-2 rounded-lg"
+                            type="text" name="" id="tittle" placeholder="Enter tittle">
+                    </div>
+                </div>
+                <div class="task-desc flex flex-col gap-2">
+                    <div>
+                        <label for="desc"
+                            class="text-zinc-700 dark:text-slate-300 font-semibold tracking-wider">Description :</label>
+                    </div>
+                    <div>
+                        <textarea
+                            class="dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 border outline-none focus:ring-2 transition-all duration-200 ring-pink-500 w-full h-16 placeholder:font-sans p-2 rounded-lg"
+                            name="" id="desc" cols="30" rows="10" placeholder="Enter description..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons flex justify-center gap-5 mt-4">
+                <div id="editCancelBtn"
+                    class="cursor-pointer border dark:border-slate-600 dark:text-pink-300 dark:hover:bg-slate-600 dark:active:bg-slate-700 hover:bg-pink-100 active:bg-pink-200 text-pink-600 font-sans font-semibold px-6 py-2 rounded-lg transition-colors duration-200">
+                    Cancel</div>
+                <input id="edit-btn"
+                    class="bg-pink-500 hover:bg-pink-600 active:bg-pink-700 text-pink-100 font-sans font-semibold px-6 py-2 rounded-lg cursor-pointer transition-colors duration-200"
+                    type="submit" value="Edit Task">
+            </div>
+        </form>
+    </div>
+
+    <header>
+        <div
+            class="navbar w-full h-14 fixed top-0 z-10 flex justify-between items-center bg-white dark:bg-slate-900 px-5 transition-all duration-200">
+            <div class="left-side">
+                <div
+                    class="menu w-10 h-10 flex justify-center items-center text-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200 text-zinc-700 rounded-lg cursor-pointer">
+                    <svg class="dark:fill-slate-300 fill-slate-700" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                        width="27" height="27" viewBox="0 0 24 24">
+                        <path
+                            d="M 3 5 A 1.0001 1.0001 0 1 0 3 7 L 21 7 A 1.0001 1.0001 0 1 0 21 5 L 3 5 z M 3 11 A 1.0001 1.0001 0 1 0 3 13 L 21 13 A 1.0001 1.0001 0 1 0 21 11 L 3 11 z M 3 17 A 1.0001 1.0001 0 1 0 3 19 L 21 19 A 1.0001 1.0001 0 1 0 21 17 L 3 17 z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+            <div class="right-side flex flex-row-reverse gap-4">
+                <div
+                    class="search w-10 h-10 flex justify-center items-center text-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200 text-zinc-700 rounded-lg cursor-pointer">
+                    <svg class="dark:fill-slate-300 fill-slate-700" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                        width="27" height="27" viewBox="0 0 30 30">
+                        <path
+                            d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z">
+                        </path>
+                    </svg>
+                </div>
+                <div
+                    class="dark-light w-10 h-10 flex justify-center items-center text-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200 text-zinc-700 rounded-lg cursor-pointer">
+                    <svg class="light opacity-0 hidden dark:fill-slate-300 fill-slate-700 transition-all duration-500"
+                        xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="27" height="27" viewBox="0 0 50 50">
+                        <path
+                            d="M 24.90625 3.96875 C 24.863281 3.976563 24.820313 3.988281 24.78125 4 C 24.316406 4.105469 23.988281 4.523438 24 5 L 24 11 C 23.996094 11.359375 24.183594 11.695313 24.496094 11.878906 C 24.808594 12.058594 25.191406 12.058594 25.503906 11.878906 C 25.816406 11.695313 26.003906 11.359375 26 11 L 26 5 C 26.011719 4.710938 25.894531 4.433594 25.6875 4.238281 C 25.476563 4.039063 25.191406 3.941406 24.90625 3.96875 Z M 10.65625 9.84375 C 10.28125 9.910156 9.980469 10.183594 9.875 10.546875 C 9.769531 10.914063 9.878906 11.304688 10.15625 11.5625 L 14.40625 15.8125 C 14.648438 16.109375 15.035156 16.246094 15.410156 16.160156 C 15.78125 16.074219 16.074219 15.78125 16.160156 15.410156 C 16.246094 15.035156 16.109375 14.648438 15.8125 14.40625 L 11.5625 10.15625 C 11.355469 9.933594 11.054688 9.820313 10.75 9.84375 C 10.71875 9.84375 10.6875 9.84375 10.65625 9.84375 Z M 39.03125 9.84375 C 38.804688 9.875 38.59375 9.988281 38.4375 10.15625 L 34.1875 14.40625 C 33.890625 14.648438 33.753906 15.035156 33.839844 15.410156 C 33.925781 15.78125 34.21875 16.074219 34.589844 16.160156 C 34.964844 16.246094 35.351563 16.109375 35.59375 15.8125 L 39.84375 11.5625 C 40.15625 11.265625 40.246094 10.800781 40.0625 10.410156 C 39.875 10.015625 39.460938 9.789063 39.03125 9.84375 Z M 24.90625 15 C 24.875 15.007813 24.84375 15.019531 24.8125 15.03125 C 24.75 15.035156 24.6875 15.046875 24.625 15.0625 C 24.613281 15.074219 24.605469 15.082031 24.59375 15.09375 C 19.289063 15.320313 15 19.640625 15 25 C 15 30.503906 19.496094 35 25 35 C 30.503906 35 35 30.503906 35 25 C 35 19.660156 30.746094 15.355469 25.46875 15.09375 C 25.433594 15.09375 25.410156 15.0625 25.375 15.0625 C 25.273438 15.023438 25.167969 15.003906 25.0625 15 C 25.042969 15 25.019531 15 25 15 C 24.96875 15 24.9375 15 24.90625 15 Z M 24.9375 17 C 24.957031 17 24.980469 17 25 17 C 25.03125 17 25.0625 17 25.09375 17 C 29.46875 17.050781 33 20.613281 33 25 C 33 29.421875 29.421875 33 25 33 C 20.582031 33 17 29.421875 17 25 C 17 20.601563 20.546875 17.035156 24.9375 17 Z M 4.71875 24 C 4.167969 24.078125 3.78125 24.589844 3.859375 25.140625 C 3.9375 25.691406 4.449219 26.078125 5 26 L 11 26 C 11.359375 26.003906 11.695313 25.816406 11.878906 25.503906 C 12.058594 25.191406 12.058594 24.808594 11.878906 24.496094 C 11.695313 24.183594 11.359375 23.996094 11 24 L 5 24 C 4.96875 24 4.9375 24 4.90625 24 C 4.875 24 4.84375 24 4.8125 24 C 4.78125 24 4.75 24 4.71875 24 Z M 38.71875 24 C 38.167969 24.078125 37.78125 24.589844 37.859375 25.140625 C 37.9375 25.691406 38.449219 26.078125 39 26 L 45 26 C 45.359375 26.003906 45.695313 25.816406 45.878906 25.503906 C 46.058594 25.191406 46.058594 24.808594 45.878906 24.496094 C 45.695313 24.183594 45.359375 23.996094 45 24 L 39 24 C 38.96875 24 38.9375 24 38.90625 24 C 38.875 24 38.84375 24 38.8125 24 C 38.78125 24 38.75 24 38.71875 24 Z M 15 33.875 C 14.773438 33.90625 14.5625 34.019531 14.40625 34.1875 L 10.15625 38.4375 C 9.859375 38.679688 9.722656 39.066406 9.808594 39.441406 C 9.894531 39.8125 10.1875 40.105469 10.558594 40.191406 C 10.933594 40.277344 11.320313 40.140625 11.5625 39.84375 L 15.8125 35.59375 C 16.109375 35.308594 16.199219 34.867188 16.039063 34.488281 C 15.882813 34.109375 15.503906 33.867188 15.09375 33.875 C 15.0625 33.875 15.03125 33.875 15 33.875 Z M 34.6875 33.875 C 34.3125 33.941406 34.011719 34.214844 33.90625 34.578125 C 33.800781 34.945313 33.910156 35.335938 34.1875 35.59375 L 38.4375 39.84375 C 38.679688 40.140625 39.066406 40.277344 39.441406 40.191406 C 39.8125 40.105469 40.105469 39.8125 40.191406 39.441406 C 40.277344 39.066406 40.140625 38.679688 39.84375 38.4375 L 35.59375 34.1875 C 35.40625 33.988281 35.148438 33.878906 34.875 33.875 C 34.84375 33.875 34.8125 33.875 34.78125 33.875 C 34.75 33.875 34.71875 33.875 34.6875 33.875 Z M 24.90625 37.96875 C 24.863281 37.976563 24.820313 37.988281 24.78125 38 C 24.316406 38.105469 23.988281 38.523438 24 39 L 24 45 C 23.996094 45.359375 24.183594 45.695313 24.496094 45.878906 C 24.808594 46.058594 25.191406 46.058594 25.503906 45.878906 C 25.816406 45.695313 26.003906 45.359375 26 45 L 26 39 C 26.011719 38.710938 25.894531 38.433594 25.6875 38.238281 C 25.476563 38.039063 25.191406 37.941406 24.90625 37.96875 Z">
+                        </path>
+                    </svg>
+                    <svg class="dark opacity-0 hidden dark:stroke-slate-300 stroke-slate-700 transition-all duration-500 w-6 h-6"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="todo-list flex w-full h-screen">
+            <div
+                class="sidebar bg-white dark:bg-slate-900 fixed flex flex-col gap-2 pt-20 w-16 h-full lg:w-40 xl:w-56 transition-all duration-200">
+                <h1 class="font-bold text-2xl hidden dark:text-slate-200 lg:block text-center mb-3">Category</h1>
+                <div
+                    class="category alltasks cursor-pointer w-full h-14 flex justify-center items-center hover:bg-zinc-100 dark:hover:bg-slate-800 dark:border-slate-700 hover:border-l-8 transition-all lg:justify-start lg:gap-3 lg:px-4 active">
+                    <div
+                        class="w-9 h-9 flex justify-center items-center bg-[#78bede] dark:bg-[rgba(120,190,222,0.880)] rounded-xl shadow-[0px_3px_10px_-1px_#78bedebf] dark:shadow-[0px_3px_10px_-2px_#78bedebf]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="#fff">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                            <path fill-rule="evenodd"
+                                d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="font-sans font-bold text-slate-700 dark:text-slate-300 hidden lg:block">
+                        <h2>All Tasks</h2>
+                    </div>
+                </div>
+                <div
+                    class="category personal cursor-pointer w-full h-14 flex justify-center items-center hover:bg-slate-100 dark:hover:bg-slate-800  dark:border-slate-700 hover:border-l-8 transition-all lg:justify-start lg:gap-3 lg:px-4">
+                    <div
+                        class="w-9 h-9 flex justify-center items-center bg-[#78dec7] dark:bg-[ rgba(120,222,198,0.880))] rounded-xl shadow-[0px_3px_10px_-1px_#78dec7bf] dark:shadow-[0px_3px_10px_-2px_#78dec7bf]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="#fff">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="font-sans font-bold text-slate-700 dark:text-slate-300 hidden lg:block">
+                        <h2>Personal</h2>
+                    </div>
+                </div>
+                <div
+                    class="category school cursor-pointer w-full h-14 flex justify-center items-center hover:bg-slate-100 dark:hover:bg-slate-800 dark:border-slate-700 hover:border-l-8 transition-all lg:justify-start lg:gap-3 lg:px-4">
+                    <div
+                        class="w-9 h-9 flex justify-center items-center bg-[#ff95c5] dark:bg-[rgba(255,149,197,0.880)] rounded-xl shadow-[0px_3px_10px_-1px_#ff95c5bf] dark:shadow-[0px_3px_10px_-2px_#ff95c5bf]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="#fff">
+                            <path
+                                d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                        </svg>
+                    </div>
+                    <div class="font-sans font-bold text-slate-700 dark:text-slate-300 hidden lg:block">
+                        <h2>School</h2>
+                    </div>
+                </div>
+                <div
+                    class="category work cursor-pointer w-full h-14 flex justify-center items-center hover:bg-slate-100 dark:hover:bg-slate-800 dark:border-slate-700 hover:border-l-8 transition-all lg:justify-start lg:gap-3 lg:px-4">
+                    <div
+                        class="w-9 h-9 flex justify-center items-center bg-[#b983ff] dark:bg-[rgba(185,131,255,0.880)] rounded-xl shadow-[0px_3px_10px_-1px_#b983ffbf] dark:shadow-[0px_3px_10px_-2px_#b983ffbf]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="#fff">
+                            <path fill-rule="evenodd"
+                                d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="font-sans font-bold text-slate-700 dark:text-slate-300 hidden lg:block">
+                        <h2>Work</h2>
+                    </div>
+                </div>
+                <div
+                    class="category shopping cursor-pointer w-full h-14 flex justify-center items-center hover:bg-slate-100 dark:hover:bg-slate-800 dark:border-slate-700 hover:border-l-8 transition-all lg:justify-start lg:gap-3 lg:px-4">
+                    <div
+                        class="w-9 h-9 flex justify-center items-center bg-[#ffd523] dark:bg-[rgba(255,215,35,0.880)] rounded-xl shadow-[0px_3px_10px_0px_#ffd523bf] dark:shadow-[0px_3px_10px_-2px_#ffd523bf]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="#fff">
+                            <path
+                                d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                        </svg>
+                    </div>
+                    <div class="font-sans font-bold text-slate-700 dark:text-slate-300 hidden lg:block">
+                        <h2>Shopping</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="todos-section w-full h-full flex justify-end items-center md:justify-center">
+                <div class="todos-container w-10/12 h-5/6 px-5 py-5 lg:w-8/12">
+                    <div class="category-tittle">
+                        <h1 class="text-slate-700 dark:text-slate-300 text-3xl font-semibold">All Tasks</h1>
+                    </div>
+                    <div id="addTask"
+                        class="outline-none dark:bg-slate-800 cursor-pointer w-full h-12 flex items-center gap-2 mt-10 px-2 bg-white border border-[#e4e4e7a6] dark:border-slate-700 rounded-lg active:bg-slate-50 transition-all duration-200">
+                        <div
+                            class="add-icon w-8 h-8 bg-slate-100 dark:bg-slate-700 rounded-xl flex justify-center items-center transition-all duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 fill-[#3f3f46] dark:fill-slate-300 transition-all duration-200"
+                                viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="add-tittle font-bold text-slate-700 dark:text-slate-300 font-sans">
+                            <h2>Add New Task</h2>
+                        </div>
+                    </div>
+                    <div class="todos-list mt-16">
+                        <h1 class="text-slate-700 dark:text-slate-300 text-2xl font-semibold">Task</h1>
+                        <!-- Tasks -->
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="./dist/js/classes.js"></script>
+    <script src="./dist/js/app.js"></script>
+</body>
+
+</html>
